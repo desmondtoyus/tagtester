@@ -1,12 +1,14 @@
 
 
 
+
+var myVar;
 let Player = function (id, vastTag, firstTime) {
     this.id = id;
     this.console = document.getElementById('ima-sample-console');
     this.playerz = videojs(id);
     this.destroyAdsManager = this.destroyAdsManager.bind(this)
-    this.destroyAdsManager();
+    // this.destroyAdsManager();
     this.init = function () {
         let player = videojs('content_video');
       
@@ -17,7 +19,7 @@ let Player = function (id, vastTag, firstTime) {
             adTagUrl: vastTag,
             adsManagerLoadedCallback: this.adsManagerLoadedCallback.bind(this),
             preload: 'auto',
-            showControlsForJSAds: false
+            // showControlsForJSAds: false
         };
         if (firstTime > 1 ) {
             console.log('Settings2', this.settings);
@@ -29,7 +31,7 @@ let Player = function (id, vastTag, firstTime) {
                     player.pause();
                 }, 200);
                player.ima.initializeAdDisplayContainer();
-                player.ima.setContentWithAdTag(null, 'https://adn.pilotx.tv/op?pid=2', true);
+                player.ima.setContentWithAdTag(null, vastTag, true);
                 player.ima.requestAds();
             }
         
@@ -60,6 +62,22 @@ let Player = function (id, vastTag, firstTime) {
         player.on('adserror', function () {
             console.log('Error Occured at', id);
 
+        });
+        player.on('adstart', function (imaAdStartEvent) {
+            myVar = setInterval(function () {
+                let timer = $("#content_video_ima-countdown-div").text();
+                let myTimer = timer.split(" ");
+                console.log('TIMER=', myTimer[1]);
+                if (myTimer[1] == '0:01') {
+                    console.log('SHOULD PAUSE HERE!!');
+                    pause(id);
+                    $("#content_video_ima-countdown-div").text(" ");
+                    
+                } }, 1000);
+        });
+        player.on('adend', function () {
+            myStopFunction();
+    
         });
 
         player.one(startEvent, function () {
@@ -115,3 +133,16 @@ Player.prototype.destroyAdsManager = function () {
         this.adsManager= null;
     }
 };
+
+
+
+function myStopFunction() {
+    clearInterval(myVar);
+}
+
+
+function pause(id) {
+    var player = videojs(id);
+    player.ima.pauseAd();
+    myStopFunction();
+}
