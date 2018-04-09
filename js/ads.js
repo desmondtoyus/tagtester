@@ -31,12 +31,19 @@ let Player = function (id, vastTag, firstTime) {
             // player.ima.changeAdTag('https://adn.pilotx.tv/op?pid=2'); // really null
             // player.ima.settings.adsResponse = "your xml";
             // player.ima.initializeAdDisplayContainer();
-            this.changeAdTag();
-            player.ima.requestAds();
-            player.play();
+            // this.changeAdTag();
+
+            // player.ima.setContentWithAdTag(null, 'https://adn.pilotx.tv/op?pid=2', false) 
+            // player.ima.requestAds();
+            // player.play();
 
             // player.one('ready', function () {
-
+            player.ima.setContentWithAdTag(
+                'https://adn.pilotx.tv/op?pid=2',
+                null,
+                false);
+            // player.poster(this.posters[event.target.id]);
+           player.ima.requestAds();
             //     player.play();
             // });
         
