@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <title>AD Tag Tester</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="http://pilotx.tv//logo/icon.png">
+<link rel="stylesheet" href="http://googleads.github.io/videojs-ima/node_modules/video.js/dist/video-js.min.css" />
+<link rel="stylesheet" href="http://googleads.github.io/videojs-ima/node_modules/videojs-contrib-ads/dist/videojs.ads.css" />
+<link rel="stylesheet" href="http://googleads.github.io/videojs-ima/dist/videojs.ima.css" />
+    <link rel="stylesheet" href="css/tagtest.css">
+   
+
+</head>
+
+<body>
+    <header>
+        <div class="headerWrapper">
+            <div class="shareWrapper">
+            <a href="http://pilotx.tv" class="logoLink">  <input type="submit" value="Home" class="btn shareBtn"> </a>
+            </div>
+            <div class="logoWrapper">
+                <a href="http://pilotx.tv/tagtest" class="logoLink">
+                    <img class="logo" src="http://pilotx.tv//logo/icon.png">
+                </a>
+            </div>
+            <h1>
+                AD Tag Tester
+            </h1>
+        </div>
+    </header>
+    <main>
+        <div class="rowWrapper">
+            <div class="rowHeader settingsHeader">
+                <h4>
+                    Options
+                    <span class="collapseIcon">
+                        <img src="ssdown.png">
+                    </span>
+                </h4>
+            </div>
+            <div class="body-row settingsCollapse">
+                <table class="settings">
+                    <tbody>
+                        <tr>
+                            <td class="flCol">
+                                <div class="formLabel">Ad Tag:</div>
+                            </td>
+                            <td>
+                                <div class="formInput">
+                                    <textarea class="inputTextarea tag" rows="3" id="tag_text"></textarea>
+                                </div>
+                                <div class="macros"></div>
+                            </td>
+                            <td></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+                <hr>
+                <div class="submitWrapper">
+                    <input type="submit" value="Test Tag" class="btn submitBtn" id="test_tag">
+                </div>
+            </div>
+        </div>
+        <div class="resultsWrapper">
+            <div class="rowWrapper rightRow">
+                <div class="rowHeader">
+                    <h4>Events</h4>
+                </div>
+                <div class="body-row flowChart">
+                    <div class="flowWrapper">
+                        <div class="impFlow">
+                            <ul>
+                                <li>
+                                    <a href="http://pilotx.tv/tagtest#" class="event" data-type="request">Ad Request
+                                        <div class="waiting" data-type="request"> (waiting...)</div>
+                                    </a>
+                                    <ul>
+                                        <li>
+                                            <a href="http://pilotx.tv/tagtest#" class="event" data-type="error">Ad Error
+                                                <div class="waiting" data-type="error"> (waiting...)</div>
+                                                <div class="event hiddenEvent" data-type="timetoerror">
+                                                    <div class="errorText firstRow"></div>
+                                                    <div class="lengthError secondRow"></div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="http://pilotx.tv/tagtest#" class="event" data-type="impression">Impression
+                                                <div class="waiting" data-type="impression"> (waiting...)</div>
+                                                <div class="event hiddenEvent" data-type="timetoimp">
+                                                    <div class="lengthImp firstRow"></div>
+                                                    <div class="lengthSpan secondRow"></div>
+                                                </div>
+                                            </a>
+                                            <ul>
+                                                <li>
+                                                    <a href="http://pilotx.tv/tagtest#" class="event" data-type="first">25% Complete
+                                                        <div class="waiting" data-type="first"> (waiting...)</div>
+                                                    </a>
+                                                    <ul>
+                                                        <li>
+                                                            <a href="http://pilotx.tv/tagtest#" class="event" data-type="second">50% Complete
+                                                                <div class="waiting" data-type="second"> (waiting...)</div>
+                                                            </a>
+                                                            <ul>
+                                                                <li>
+                                                                    <a href="http://pilotx.tv/tagtest#" class="event" data-type="third">75% Complete
+                                                                        <div class="waiting" data-type="third"> (waiting...)</div>
+                                                                    </a>
+                                                                    <ul>
+                                                                        <li>
+                                                                            <a href="http://pilotx.tv/tagtest#" class="event" data-type="complete">Ad Complete
+                                                                                <div class="waiting" data-type="complete"> (waiting...)</div>
+                                                                            </a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="dashed">
+                                                    <a href="http://pilotx.tv/tagtest#" class="dashed event" data-type="click">Click
+                                                        <div class="waiting" data-type="click"> (waiting...)</div>
+                                                    </a>
+                                                    <ul class="dashed">
+                                                        <li class="dashed">
+                                                            <a href="http://pilotx.tv/tagtest#" class="dashed event" data-type="pause">Pause
+                                                                <div class="waiting" data-type="pause"> (waiting...)</div>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="rowWrapper leftRow">
+                <div class="rowHeader">
+                    <h4>Video</h4>
+                </div>
+                <div class="body-row">
+                    <div class="videoShow" width="640px" height="360px">
+                        <video id="content_video" class="video-js vjs-default-skin" controls preload="auto" autoplay>
+                            <source src="img/pilotx.mp4" type="video/mp4"/>
+                        </video>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="metaWrapper">
+            <div class="rowWrapper">
+                <div class="rowHeader">
+                    <h4>Metadata</h4>
+                </div>
+                <div class="body-row">
+                    <div class="metaIntro">Tag information goes here</div>
+                    <div class="metaResults">
+                        <div class="metaRow" data-type="original">
+                            <div class="metaHeader" data-type="original">Original tag</div>
+                            <div class="metaResult" data-type="original">
+                                <div class="requestOriginal">Original tag will be displayed here</div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="metaRow" data-type="macros">
+                            <div class="metaHeader" data-type="macros">Macros Replaced</div>
+                            <div class="metaResult" data-type="macros">None</div>
+                        </div>
+                        <hr>
+                        <div class="metaRow" data-type="vasttag">
+                            <div class="metaHeader" data-type="vasttag">Tag Requested</div>
+                            <div class="metaResult" data-type="vasttag">
+                                <div class="requestCall">Requested tag will be displayed here</div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="metaRow" data-type="tagresponse">
+                            <div class="metaHeader" data-type="tagresponse">Full Tag Response (XML)</div>
+                            <div class="metaResult" data-type="tagresponse">
+                                <div class="responseShow">
+                                    Show Response
+                                    <span class="toggleExpand"></span>
+                                </div>
+                                <div class="tagResponse">Tag response will be displayed here</div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="metaRow" data-type="tagtiming">
+                            <div class="metaHeader" data-type="tagtiming">Timing Info</div>
+                            <div class="metaResult" data-type="tagtiming">
+                                <div class="tagTime">
+                                    <b>Player load time:</b>
+                                    <span class="timingData" data-type="player">waiting...</span>
+                                </div>
+                                <div class="tagTime">
+                                    <b>Initial tag response time:</b>
+                                    <span class="timingData" data-type="initial">waiting...</span>
+                                </div>
+                                <div class="tagTime">
+                                    <b>Response time to impression:</b>
+                                    <span class="timingData" data-type="impression">waiting...</span>
+                                </div>
+                                <div class="tagTime">
+                                    <b>Response time to error:</b>
+                                    <span class="timingData" data-type="error">waiting...</span>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="metaRow" data-type="impinfo">
+                            <div class="metaHeader" data-type="impinfo">Impression Info</div>
+                            <div class="metaResult" data-type="impinfo">
+                                <div class="impMeta">
+                                    <b>Ad type:</b>
+                                    <span class="impData" data-type="impcrtype">waiting...</span>
+                                </div>
+                                <div class="impMeta">
+                                    <b>Ad Engine:</b>
+                                    <span class="impData" data-type="adengine">waiting...</span>
+                                </div>
+                                <div class="impMeta">
+                                    <b>VAST Version:</b>
+                                    <span class="impData" data-type="vastversion">waiting...</span>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="metaRow" data-type="errorinfo">
+                            <div class="metaHeader" data-type="errorinfo">Error Info</div>
+                            <div class="metaResult" data-type="errorinfo">
+                                <div class="errorMeta">
+                                    <b>Ad type:</b>
+                                    <span class="errorData" data-type="errorcrtype">waiting...</span>
+                                </div>
+                                <div class="errorMeta">
+                                    <b>VAST error code:</b>
+                                    <span class="errorData" data-type="errorcode">waiting...</span>
+                                </div>
+                                <div class="errorMeta">
+                                    <b>Player error message:</b>
+                                    <span class="errorData" data-type="playermsg">waiting...</span>
+                                </div>
+                                <div class="errorMeta">
+                                    <b>VAST error message:</b>
+                                    <span class="errorData" data-type="vastmsg">waiting...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div class="shareBox">
+        <textarea class="shareText" rows="7" readonly="">http://pilotx.tv/tagtest</textarea>
+    </div>
+    <div class="copySuccess">
+        <span class="checkIcon">✓</span>
+    </div>
+
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="http://googleads.github.io/videojs-ima/node_modules/video.js/dist/video.min.js"></script>
+<script src="http://imasdk.googleapis.com/js/sdkloader/ima3.js"></script>
+<script src="http://googleads.github.io/videojs-ima/node_modules/videojs-contrib-ads/dist/videojs.ads.min.js"></script>
+<script src="http://googleads.github.io/videojs-ima/dist/videojs.ima.js"></script>
+<script src="js/ads.js" type="text/javascript"></script>
+<script src="js/app.js" type="text/javascript"></script>
+</html>
