@@ -7,11 +7,6 @@ let Player = function (id, vastTag, firstTime) {
     this.playerz = videojs(id);
     this.destroyAdsManager = this.destroyAdsManager.bind(this)
     this.destroyAdsManager();
-    this.changeAdTag = function () {
-        // resetIMA_();
-        // this.options.adTagUrl = adTag;
-        this.settings.adTagUrl = vastTag;
-    };
     this.init = function () {
         let player = videojs('content_video');
       
@@ -21,31 +16,22 @@ let Player = function (id, vastTag, firstTime) {
             id: id,
             adTagUrl: vastTag,
             adsManagerLoadedCallback: this.adsManagerLoadedCallback.bind(this),
-            preload: 'auto'
-            // showControlsForJSAds: false
+            preload: 'auto',
+            showControlsForJSAds: false
         };
         if (firstTime > 1 ) {
             console.log('Settings2', this.settings);
-            console.log('Not First time');
+            console.log('Not First time', firstTime);
             console.log('vastTag', vastTag);
-            // player.ima.changeAdTag('https://adn.pilotx.tv/op?pid=2'); // really null
-            // player.ima.settings.adsResponse = "your xml";
-            // player.ima.initializeAdDisplayContainer();
-            // this.changeAdTag();
 
-            // player.ima.setContentWithAdTag(null, 'https://adn.pilotx.tv/op?pid=2', false) 
-            // player.ima.requestAds();
-            // player.play();
-
-            // player.one('ready', function () {
-            player.ima.setContentWithAdTag(
-                'https://adn.pilotx.tv/op?pid=2',
-                null,
-                false);
-            // player.poster(this.posters[event.target.id]);
-           player.ima.requestAds();
-            //     player.play();
-            // });
+            if ('undefined' !== typeof vastTag) {
+                setTimeout(function () {
+                    player.pause();
+                }, 200);
+               player.ima.initializeAdDisplayContainer();
+                player.ima.setContentWithAdTag(null, 'https://adn.pilotx.tv/op?pid=2', true);
+                player.ima.requestAds();
+            }
         
         } else {
             console.log('Settings', this.options);

@@ -15,15 +15,16 @@ $('#test_tag').on('click', function (e) {
         $("#tag_text").css({ 'border-color': 'blue' });
         $("#tag_text").attr('placeholder', '');
         $(".settingsCollapse").slideToggle();
-        if (firstTime > 1) {
-            let player1 = new Player(id, tag, firstTime);
-            player1.init();
-        } else {
-            let player1 = new Player(id, tag, firstTime);
-            player1.init();  
-        }
+        // if (firstTime > 1) {
+        //     let player1 = new Player(id, tag, firstTime);
+        //     player1.init();
+        // } else {
+        //     let player1 = new Player(id, tag, firstTime);
+        //     player1.init();  
+        // }
     
-       
+        let player1 = new Player(id, tag, firstTime);
+        player1.init();  
     }
 
 })
