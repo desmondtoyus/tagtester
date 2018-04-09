@@ -21,10 +21,7 @@ $('#test_tag').on('click', function (e) {
         } else {
             let player1 = new Player(id, tag, firstTime);
             player1.init();  
-        }
-    
-        // let player1 = new Player(id, tag, firstTime);
-        // player1.init();  
+        } 
     }
 
 })
@@ -33,14 +30,3 @@ $('.settingsHeader').on('click', function (e) {
     e.preventDefault();
     $(".settingsCollapse").slideToggle();
 });
-
-
-// if (firstTimeAds == "yes") {
-//     // The first time
-//     player.ima(options);
-//     firstTimeAds = "no";
-// } else {
-//     // alert ("not first time");
-//     player.ima.changeAdTag(player.currentClip.ads.adCall);
-//     player.ima.requestAds();
-// }

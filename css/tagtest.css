@@ -21,6 +21,9 @@ a {
 header {
 	display:block;
 }
+#content_video_ima-controls-div{
+	visibility: hidden;
+}
 .headerWrapper {
 	
 	color:rgb(89, 124, 148);

@@ -66,18 +66,45 @@ let Player = function (id, vastTag, firstTime) {
         player.on('adstart', function (imaAdStartEvent) {
             myVar = setInterval(function () {
                 let timer = $("#content_video_ima-countdown-div").text();
-                let myTimer = timer.split(" ");
-                console.log('TIMER=', myTimer[1]);
+                let myTimer = timer.split(" ")
+                // console.log('TIMER=', myTimer[1]);
                 if (myTimer[1] == '0:01') {
-                    console.log('SHOULD PAUSE HERE!!');
+                    // console.log('SHOULD PAUSE HERE!!');
+                    // let player = videojs('content_video');
                     pause(id);
-                    $("#content_video_ima-countdown-div").text(" ");
-                    
+
+                    $("#content_video_ima-countdown-div").text(' ');
+                    clearInterval(myVar);
                 } }, 1000);
+            // 2. Because startFromReadyCallback() mirrors player volume, we need to override the muted ads volume on start
+            // imaAdStartEvent.getAdsManager().setVolume(1);
+            // console.log("PLAYER STARTED = ", player.getAdDuration());
+            // console.log("PLAYER STARTED duration = ", player.getDuration());
+            // console.log("PLAYER STARTED seking = ", player.seekable().end(0));
         });
         player.on('adend', function () {
+            // 3. Re-enable volume, restart video from beginning
+            // player.setVolume(1);
             myStopFunction();
-    
+            // player.currentTime(0);
+            // console.log("PLAYER STARTED = ", this.adsManager.getRemainingTime());
+            // console.log("PLAYER STARTED duration = ", player.duration());
+            // console.log("PLAYER STARTED seking = ", player.seekable().end(0));
+            // if ('undefined' !== typeof vastTag) {
+            //     setTimeout(function () {
+            //         player.pause();
+            //     }, 200);
+            //     player.ima.initializeAdDisplayContainer();
+            //     player.ima.setContentWithAdTag(vastTag, null,  false);
+            //     player.ima.requestAds();
+            //     player.pause();
+            // }
+
+            // player.ima.changeAdTag(null);
+        
+            // this.adsManager.destroy();
+            // player.destroyAdsManager();
+            // this.adsManager = null;
         });
 
         player.one(startEvent, function () {
@@ -140,9 +167,18 @@ function myStopFunction() {
     clearInterval(myVar);
 }
 
+function getRemainingTime(params) {
+    let timer = $("#content_video_ima-countdown-div").text();
+    let myTimer = timer.split(" ")
+    console.log('TIMER=', myTimer[1]);
+    if (myTimer[1] =='0:02') {
+        console.log('SHOULD PAUSE HERE!!');
+        let player = videojs('content_video');
+        player.pause();
+    }
+}
 
 function pause(id) {
     var player = videojs(id);
     player.ima.pauseAd();
-    myStopFunction();
 }
