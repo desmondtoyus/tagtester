@@ -18,6 +18,10 @@ a {
 	text-decoration:none;
 	color:#777;
 }
+#adContainer{
+	padding-top: 5%;
+max-height: 390px;
+}
 header {
 	display:block;
 }
@@ -153,17 +157,18 @@ h4 {
 	background:#fff;
 	cursor:pointer;
 }
-.btnGroup {
+.buttonGroup {
 	display:block;
 	position:relative;
 	vertical-align:middle;
 	line-height:1.42857143;
 	margin-top:4px;
 }
-.btn {
+.button {
 	padding:6px 12px;
 	border:1px solid #d7d7d7;
 	font-size:13px;
+	border-radius: 8px;
 	background:#fff;
 	border-bottom:2px solid #d7d7d7;
 	cursor:pointer;
@@ -171,19 +176,22 @@ h4 {
 	text-align:center;
 	white-space:nowrap;
 	line-height:1.42857143;
-	color:grey;
+	color: white;
+	background:rgb(89, 124, 148);
 }
-.btn:hover {
-	background:#d7d7d7;
+.button:hover {
+	color: black;
 }
-
-.btnActive {
+.tag-heading{
+font-weight: bold;
+}
+.buttonActive {
 	background:rgb(89, 124, 148);
 	border:1px solid rgb(89, 124, 148);
 	border-bottom:2px solid rgb(89, 124, 148);
 	color:white;
 }
-.btnActive:hover {
+.buttonActive:hover {
 	background:rgb(89, 124, 148);
 	cursor:default;
 }
@@ -196,13 +204,13 @@ hr {
 .submitWrapper {
 	text-align:center;
 }
-.submitBtn,.shareBtn {
+.submitbutton,.sharebutton {
 	background:rgb(89, 124, 148);
 	border:1px solid rgb(89, 124, 148);
 	border-bottom:2px solid rgb(89, 124, 148);
 	color:white;
 }
-.submitBtn:hover,.shareBtn:hover {
+.submitbutton:hover,.sharebutton:hover {
 	background:rgb(89, 124, 148);
 	border-bottom:1px solid rgb(89, 124, 148);
 	margin-top:1px;
@@ -335,9 +343,13 @@ hr {
 	font-style:italic;
 	word-wrap: break-word;
 }
-.video-js{
+video{
 	width: 100%;
     height: 100%;
+}
+#content_video{
+width: 100%;
+    height: 360px;
 }
 .impFlow li a.dashed {
 	border: 1px dotted #ccc;
@@ -527,13 +539,13 @@ hr {
 .ui-button-text-only .ui-button-text {
 	padding:0px;
 }
-.shareBtnActive {
+.sharebuttonActive {
 	background:rgb(89, 124, 148) !important;
 	border:1px solid rgb(89, 124, 148) !important;
 	border-bottom:2px solid rgb(89, 124, 148) !important;
 	color:white !important;
 }
-.shareBtnActive:hover {
+.sharebuttonActive:hover {
 	background:rgb(89, 124, 148) !important;
 }
 .copySuccess {

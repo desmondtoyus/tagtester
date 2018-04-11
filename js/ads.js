@@ -1,184 +1,337 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
+var adsManager;
+var adsLoader;
+var adDisplayContainer;
+var playButton;
+var videoContent;
+var adsInitialized;
+var autoplayAllowed;
+var autoplayRequiresMuted;
+var intervalTimer;
+var responseTime = 0;
+var responseTimer;
 
+function initDesktopAutoplayExample() {
+    videoContent = document.getElementById('content_video');
+    setUpIMA();
+    // Check if autoplay is supported.
+    responseTime =0;
+    responseTimer = setInterval(
+        function () {
+            responseTime += 0.1;
 
+        },
+        100);
+    checkAutoplaySupport();
+}
 
-var myVar;
-let Player = function (id, vastTag, firstTime) {
-    this.id = id;
-    this.console = document.getElementById('ima-sample-console');
-    this.playerz = videojs(id);
-    this.destroyAdsManager = this.destroyAdsManager.bind(this)
-    // this.destroyAdsManager();
-    this.init = function () {
-        let player = videojs('content_video');
-      
-        
-
-        let options = {
-            id: id,
-            adTagUrl: vastTag,
-            adsManagerLoadedCallback: this.adsManagerLoadedCallback.bind(this),
-            preload: 'auto',
-            // showControlsForJSAds: false
-        };
-        if (firstTime > 1 ) {
-            console.log('Settings2', this.settings);
-            console.log('Not First time', firstTime);
-            console.log('vastTag', vastTag);
-
-            if ('undefined' !== typeof vastTag) {
-                setTimeout(function () {
-                    player.pause();
-                }, 200);
-               player.ima.initializeAdDisplayContainer();
-                player.ima.setContentWithAdTag(null, vastTag, true);
-                player.ima.requestAds();
-            }
-        
-        } else {
-            console.log('Settings', this.options);
-            console.log('First time');
-            player.ima(options); 
-        }
-        
-
-        // Remove controls from the player on iPad to stop native controls from stealing
-        // our click
-        let contentPlayer = document.getElementById(id);
-        if ((navigator.userAgent.match(/iPad/i) ||
-            navigator.userAgent.match(/Android/i)) &&
-            contentPlayer.hasAttribute('controls')) {
-            contentPlayer.removeAttribute('controls');
-        }
-
-        // Initialize the ad container when the video player is clicked, but only the
-        // first time it's clicked.
-        let startEvent = 'click';
-        if (navigator.userAgent.match(/iPhone/i) ||
-            navigator.userAgent.match(/iPad/i) ||
-            navigator.userAgent.match(/Android/i)) {
-            startEvent = 'touchend';
-        }
-        player.on('adserror', function () {
-            console.log('Error Occured at', id);
-
-        });
-        player.on('adstart', function (imaAdStartEvent) {
-            myVar = setInterval(function () {
-                let timer = $("#content_video_ima-countdown-div").text();
-                let myTimer = timer.split(" ")
-                // console.log('TIMER=', myTimer[1]);
-                if (myTimer[1] == '0:01') {
-                    // console.log('SHOULD PAUSE HERE!!');
-                    // let player = videojs('content_video');
-                    pause(id);
-
-                    $("#content_video_ima-countdown-div").text(' ');
-                    clearInterval(myVar);
-                } }, 1000);
-            // 2. Because startFromReadyCallback() mirrors player volume, we need to override the muted ads volume on start
-            // imaAdStartEvent.getAdsManager().setVolume(1);
-            // console.log("PLAYER STARTED = ", player.getAdDuration());
-            // console.log("PLAYER STARTED duration = ", player.getDuration());
-            // console.log("PLAYER STARTED seking = ", player.seekable().end(0));
-        });
-        player.on('adend', function () {
-            // 3. Re-enable volume, restart video from beginning
-            // player.setVolume(1);
-            myStopFunction();
-            // player.currentTime(0);
-            // console.log("PLAYER STARTED = ", this.adsManager.getRemainingTime());
-            // console.log("PLAYER STARTED duration = ", player.duration());
-            // console.log("PLAYER STARTED seking = ", player.seekable().end(0));
-            // if ('undefined' !== typeof vastTag) {
-            //     setTimeout(function () {
-            //         player.pause();
-            //     }, 200);
-            //     player.ima.initializeAdDisplayContainer();
-            //     player.ima.setContentWithAdTag(vastTag, null,  false);
-            //     player.ima.requestAds();
-            //     player.pause();
-            // }
-
-            // player.ima.changeAdTag(null);
-        
-            // this.adsManager.destroy();
-            // player.destroyAdsManager();
-            // this.adsManager = null;
-        });
-
-        player.one(startEvent, function () {
-            player.ima.initializeAdDisplayContainer();
-        });
-
-       
+function checkAutoplaySupport() {
+    // Test for autoplay support with our content player.
+    var playPromise = videoContent.play();
+    if (playPromise !== undefined) {
+        playPromise.then(onAutoplayWithSoundSuccess).catch(onAutoplayWithSoundFail);
     }
 }
-Player.prototype.adsManagerLoadedCallback = function () {
-    let events = [
+
+function onAutoplayWithSoundSuccess() {
+    // If we make it here, unmuted autoplay works.
+    videoContent.pause();
+    autoplayAllowed = true;
+    autoplayRequiresMuted = false;
+    autoplayChecksResolved();
+}
+
+function onAutoplayWithSoundFail() {
+    // Unmuted autoplay failed. Now try muted autoplay.
+    checkMutedAutoplaySupport();
+}
+
+function checkMutedAutoplaySupport() {
+    videoContent.volume = 0;
+    videoContent.muted = true;
+    var playPromise = videoContent.play();
+    if (playPromise !== undefined) {
+        playPromise.then(onMutedAutoplaySuccess).catch(onMutedAutoplayFail);
+    }
+}
+
+function onMutedAutoplaySuccess() {
+    // If we make it here, muted autoplay works but unmuted autoplay does not.
+    videoContent.pause();
+    autoplayAllowed = true;
+    autoplayRequiresMuted = true;
+    autoplayChecksResolved();
+}
+
+function onMutedAutoplayFail() {
+    // Both muted and unmuted autoplay failed. Fall back to click to play.
+    videoContent.volume = 1;
+    videoContent.muted = false;
+    autoplayAllowed = false;
+    autoplayRequiresMuted = false;
+    autoplayChecksResolved();
+}
+
+function setUpIMA() {
+    // Create the ad display container.
+    createAdDisplayContainer();
+    // Create ads loader.
+    adsLoader = new google.ima.AdsLoader(adDisplayContainer);
+    // Listen and respond to ads loaded and error events.
+    adsLoader.addEventListener(
+        google.ima.AdsManagerLoadedEvent.Type.ADS_MANAGER_LOADED,
+        onAdsManagerLoaded,
+        false);
+    adsLoader.addEventListener(
+        google.ima.AdErrorEvent.Type.AD_ERROR,
+        onAdError,
+        false);
+
+    // An event listener to tell the SDK that our content video
+    // is completed so the SDK can play any post-roll ads.
+    videoContent.onended = contentEndedListener;
+}
+
+function contentEndedListener() {
+    videoContent.onended = null;
+    if (adsLoader) {
+        adsLoader.contentComplete();
+    }
+}
+
+function autoplayChecksResolved() {
+    // Request video ads.
+    var adsRequest = new google.ima.AdsRequest();
+    adsRequest.adTagUrl = document.getElementById('tag_text').value;
+
+    // Specify the linear and nonlinear slot sizes. This helps the SDK to
+    // select the correct creative if multiple are returned.
+    adsRequest.linearAdSlotWidth = 640;
+    adsRequest.linearAdSlotHeight = 400;
+
+    adsRequest.nonLinearAdSlotWidth = 640;
+    adsRequest.nonLinearAdSlotHeight = 150;
+
+    adsRequest.setAdWillAutoPlay(autoplayAllowed);
+    adsRequest.setAdWillPlayMuted(autoplayRequiresMuted);
+    adsLoader.requestAds(adsRequest);
+}
+
+function createAdDisplayContainer() {
+    // We assume the adContainer is the DOM id of the element that will house
+    // the ads.
+    adDisplayContainer = new google.ima.AdDisplayContainer(
+        document.getElementById('adContainer'), videoContent);
+}
+
+function playAds() {
+    try {
+        if (!adsInitialized) {
+            adDisplayContainer.initialize();
+            adsInitialized = true;
+        }
+        // Initialize the ads manager. Ad rules playlist will start at this time.
+        adsManager.init(640, 360, google.ima.ViewMode.NORMAL);
+        // Call play to start showing the ad. Single video and overlay ads will
+        // start at this time; the call will be ignored for ad rules.
+        adsManager.start();
+    } catch (adError) {
+        // An error may be thrown if there was a problem with the VAST response.
+        videoContent.play();
+    }
+}
+
+function onAdsManagerLoaded(adsManagerLoadedEvent) {
+    // Get the ads manager.
+    var adsRenderingSettings = new google.ima.AdsRenderingSettings();
+    adsRenderingSettings.restoreCustomPlaybackStateOnAdBreakComplete = true;
+    // videoContent should be set to the content video element.
+    adsManager = adsManagerLoadedEvent.getAdsManager(
+        videoContent, adsRenderingSettings);
+
+    // Add listeners to the required events.
+    adsManager.addEventListener(
+        google.ima.AdErrorEvent.Type.AD_ERROR,
+        onAdError);
+    adsManager.addEventListener(
+        google.ima.AdEvent.Type.CONTENT_PAUSE_REQUESTED,
+        onContentPauseRequested);
+    adsManager.addEventListener(
+        google.ima.AdEvent.Type.CONTENT_RESUME_REQUESTED,
+        onContentResumeRequested);
+    adsManager.addEventListener(
         google.ima.AdEvent.Type.ALL_ADS_COMPLETED,
-        google.ima.AdEvent.Type.CLICK,
-        google.ima.AdEvent.Type.COMPLETE,
-        google.ima.AdEvent.Type.FIRST_QUARTILE,
+        onAdEvent);
+
+    // Listen to any additional events, if necessary.
+    adsManager.addEventListener(
         google.ima.AdEvent.Type.LOADED,
-        google.ima.AdEvent.Type.MIDPOINT,
-        google.ima.AdEvent.Type.PAUSED,
+        onAdEvent);
+    adsManager.addEventListener(
         google.ima.AdEvent.Type.STARTED,
-        google.ima.AdEvent.Type.THIRD_QUARTILE
-    ];
-
-    for (let index = 0; index < events.length; index++) {
-        this.playerz.ima.addEventListener(
-            events[index],
-            this.onAdEvent.bind(this));
-    }
-};
-
-Player.prototype.onAdEvent = function (event) {
-    let endingPlay = document.getElementById(this.id);
-    if (event.type == 'loaded') {
-    }
-    console.log("EVENT", event.type);
-    if (event.type == 'start') {
-        console.log("EVENT", event.type);
-
-    }
-    if (event.type == 'pause') {
-        console.log("EVENT", event.type);
-    }
-
-    if (event.type == 'complete') {
-        // if (this.inArticle == 'in_article')
-        console.log("EVENT", event.type);
-    }
-};
-
-Player.prototype.destroyAdsManager = function () {
-    if (this.adsManager) {
-        console.log("AD MANAGER");
-        this.adsManager.destroy();
-        this.adsManager= null;
-    }
-};
-
-
-
-function myStopFunction() {
-    clearInterval(myVar);
+        onAdEvent);
+    adsManager.addEventListener(
+        google.ima.AdEvent.Type.COMPLETE,
+        onAdEvent);
+    adsManager.addEventListener(
+        google.ima.AdEvent.Type.FIRST_QUARTILE,
+        onAdEvent);
+    adsManager.addEventListener(
+        google.ima.AdEvent.Type.CLICK,
+        onAdEvent);
+    adsManager.addEventListener(
+        google.ima.AdEvent.Type.MIDPOINT,
+        onAdEvent);
+    adsManager.addEventListener(
+        google.ima.AdEvent.Type.PAUSED,
+        onAdEvent);
+    adsManager.addEventListener(
+        google.ima.AdEvent.Type.STARTED,
+        onAdEvent);
+    adsManager.addEventListener(
+        google.ima.AdEvent.Type.THIRD_QUARTILE,
+        onAdEvent);
+    if (autoplayAllowed) {
+        playAds();
+    } 
 }
 
-function getRemainingTime(params) {
-    let timer = $("#content_video_ima-countdown-div").text();
-    let myTimer = timer.split(" ")
-    console.log('TIMER=', myTimer[1]);
-    if (myTimer[1] =='0:02') {
-        console.log('SHOULD PAUSE HERE!!');
-        let player = videojs('content_video');
-        player.pause();
+function onAdEvent(adEvent) {
+    console.log('EVENT HAPPENING = ', adEvent)
+    // Retrieve the ad from the event. Some events (e.g. ALL_ADS_COMPLETED)
+    // don't have ad object associated.
+    var ad = adEvent.getAd();
+    switch (adEvent.type) {
+        case google.ima.AdEvent.Type.LOADED:
+            // every 300ms
+            // This is the first event sent for an ad - it is possible to
+            // determine whether the ad is a video ad or an overlay.
+            clearInterval(intervalTimer);
+            console.log("Event: Ads loaded");
+            $('#tag-request-wait').css({'color':'green'});
+            $('#tag-request').css({ 'color': 'green', 'border-color': 'green',  });
+
+            if (!ad.isLinear()) {
+                videoContent.play();
+            }
+            break;
+
+        case google.ima.AdEvent.Type.STARTED:
+            console.log("Event: Ads Started");
+            $('#tag-request-wait').text('');
+
+            $('#tag-start-wait').css({ 'color': 'green' });
+            $('#tag-start').css({ 'color': 'green', 'border-color': 'green', });
+            setTimeout(() => {
+                $('#tag-start-wait').text('');
+                
+                
+            }, 1000);
+            clearInterval(responseTimer);
+            // console.log('DURATION = ', ad.getDuration() )
+            $('#tag-start-res').html(`Response time: ${responseTime.toFixed(2)} sec\n`);
+           
+            intervalTimer = setInterval(
+                function () {
+                    let remainingTime = adsManager.getRemainingTime().toFixed(0);    
+                        if (remainingTime == '-1') {
+                            remainingTime = '0:00'
+                        }   
+                    $('#tag-start-dur').html(`Duration: ${ad.getDuration().toFixed(0) } sec \n ${remainingTime} sec remaining`);
+                },
+                1000);
+            break;
+
+        case google.ima.AdEvent.Type.FIRST_QUARTILE:
+            console.log("Event: FIRST_QUARTILE");
+            setTimeout(() => {
+                $('#tag-quarter-wait').text('');
+            }, 1000);
+            
+            $('#tag-quarter-wait').css({ 'color': 'green' });
+            $('#tag-quarter').css({ 'color': 'green', 'border-color': 'green', });
+            
+
+            break;
+
+        case google.ima.AdEvent.Type.CLICK:
+            console.log("Event: CLICKED");
+            break;
+
+        case google.ima.AdEvent.Type.MIDPOINT:
+            console.log("Event: HALF WAY");
+            break;
+
+        case google.ima.AdEvent.Type.THIRD_QUARTILE:
+            console.log("Event: THIRD_QUARTILE");
+            break;
+
+        case google.ima.AdEvent.Type.COMPLETE:
+            console.log("Event: COMPLETED");
+            // clearInterval(intervalTimer);
+           
+            break;
+
+        case google.ima.AdEvent.Type.PAUSED:
+            break;
     }
 }
 
-function pause(id) {
-    var player = videojs(id);
-    player.ima.pauseAd();
+function onAdError(adErrorEvent) {
+setTimeout(() => {
+    $('#tag-error-wait').text('');
+}, 1000);
+   
+    $('#tag-error-wait').css({ 'color': 'red' });
+    $('#tag-error').css({ 'color': 'red', 'border-color': 'red'});
+    clearInterval(responseTimer);
+    $('#tag-error-msg').html(`Error Message: ${adErrorEvent.getError()}`)
+    $('#tag-error-res').html(`Response time: ${responseTime.toFixed(2)} sec\n`);
+    console.log(adErrorEvent.getError());
+    console.log("Event: Error Occured");
+    adsManager.destroy();
+}
+
+function restart(){
+    adsManager.destroy();
+}
+
+function onContentPauseRequested() {
+    videoContent.pause();
+    videoContent.onended = null;
+}
+
+function onContentResumeRequested() {
+    videoContent.play();
+    videoContent.onended = contentEndedListener;
+}
+
+function playAds() {
+    // Initialize the container. Must be done via a user action on mobile devices.
+    videoContent.load();
+    adDisplayContainer.initialize();
+
+    try {
+        // Initialize the ads manager. Ad rules playlist will start at this time.
+        adsManager.init(640, 360, google.ima.ViewMode.NORMAL);
+        // Call play to start showing the ad. Single video and overlay ads will
+        // start at this time; the call will be ignored for ad rules.
+        adsManager.start();
+    } catch (adError) {
+        // An error may be thrown if there was a problem with the VAST response.
+        videoContent.play();
+    }
 }
