@@ -211,18 +211,13 @@ function onAdsManagerLoaded(adsManagerLoadedEvent) {
 
 function onAdEvent(adEvent) {
     console.log('EVENT HAPPENING = ', adEvent)
-    // Retrieve the ad from the event. Some events (e.g. ALL_ADS_COMPLETED)
-    // don't have ad object associated.
     var ad = adEvent.getAd();
     switch (adEvent.type) {
         case google.ima.AdEvent.Type.LOADED:
-            // every 300ms
-            // This is the first event sent for an ad - it is possible to
-            // determine whether the ad is a video ad or an overlay.
             clearInterval(intervalTimer);
             console.log("Event: Ads loaded");
-            $('#tag-request-wait').css({'color':'green'});
-            $('#tag-request').css({ 'color': 'green', 'border-color': 'green',  });
+            $('#tag-request').css({ 'color': 'green', 'border-color': 'green' });
+            $('#tag-request-wait').text('')
 
             if (!ad.isLinear()) {
                 videoContent.play();
@@ -231,17 +226,9 @@ function onAdEvent(adEvent) {
 
         case google.ima.AdEvent.Type.STARTED:
             console.log("Event: Ads Started");
-            $('#tag-request-wait').text('');
-
-            $('#tag-start-wait').css({ 'color': 'green' });
             $('#tag-start').css({ 'color': 'green', 'border-color': 'green', });
-            setTimeout(() => {
-                $('#tag-start-wait').text('');
-                
-                
-            }, 1000);
+            $('#tag-start-wait').text('');
             clearInterval(responseTimer);
-            // console.log('DURATION = ', ad.getDuration() )
             $('#tag-start-res').html(`Response time: ${responseTime.toFixed(2)} sec\n`);
            
             intervalTimer = setInterval(
@@ -257,14 +244,8 @@ function onAdEvent(adEvent) {
 
         case google.ima.AdEvent.Type.FIRST_QUARTILE:
             console.log("Event: FIRST_QUARTILE");
-            setTimeout(() => {
-                $('#tag-quarter-wait').text('');
-            }, 1000);
-            
-            $('#tag-quarter-wait').css({ 'color': 'green' });
+            $('#tag-quarter-wait').text('');
             $('#tag-quarter').css({ 'color': 'green', 'border-color': 'green', });
-            
-
             break;
 
         case google.ima.AdEvent.Type.CLICK:
@@ -273,16 +254,20 @@ function onAdEvent(adEvent) {
 
         case google.ima.AdEvent.Type.MIDPOINT:
             console.log("Event: HALF WAY");
+            $('#tag-half-wait').text('');
+            $('#tag-half').css({ 'color': 'green', 'border-color': 'green', });
             break;
 
         case google.ima.AdEvent.Type.THIRD_QUARTILE:
             console.log("Event: THIRD_QUARTILE");
+            $('#tag-third-wait').text('');
+            $('#tag-third').css({ 'color': 'green', 'border-color': 'green', });
             break;
 
         case google.ima.AdEvent.Type.COMPLETE:
             console.log("Event: COMPLETED");
-            // clearInterval(intervalTimer);
-           
+            $('#tag-complete-wait').text('');
+            $('#tag-complete').css({ 'color': 'green', 'border-color': 'green', });
             break;
 
         case google.ima.AdEvent.Type.PAUSED:
@@ -291,11 +276,7 @@ function onAdEvent(adEvent) {
 }
 
 function onAdError(adErrorEvent) {
-setTimeout(() => {
     $('#tag-error-wait').text('');
-}, 1000);
-   
-    $('#tag-error-wait').css({ 'color': 'red' });
     $('#tag-error').css({ 'color': 'red', 'border-color': 'red'});
     clearInterval(responseTimer);
     $('#tag-error-msg').html(`Error Message: ${adErrorEvent.getError()}`)
