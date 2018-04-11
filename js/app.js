@@ -1,3 +1,4 @@
+var myTimer = 0;
 $('#test_tag').on('click', function (e) {
     e.preventDefault();
     let tag = $("#tag_text").val().trim();
@@ -10,10 +11,10 @@ $('#test_tag').on('click', function (e) {
     $('#tag-start-wait').text('waiting');
     $('#tag-start-res').text('');
     $('#tag-start-dur').text('');
-    
+
     $('#tag-quarter').css({ 'color': '', 'border-color': '' });
     $('#tag-quarter-wait').text('waiting');
-    
+
     $('#tag-half').css({ 'color': '', 'border-color': '' });
     $('#tag-half-wait').text('waiting');
 
@@ -31,19 +32,26 @@ $('#test_tag').on('click', function (e) {
     $('#tag-error-res').text('');
 
 
-// tag-third
-// tag-complete
+    // tag-third
+    // tag-complete
     if (tag == '') {
         console.log('Empty Textbox');
         $("#tag_text").css({ 'border-color': 'red' });
         $("#tag_text").attr('placeholder', 'Tag goes here');
     }
     else {
+        myTimer++;
         $("#tag_text").css({ 'border-color': 'blue' });
         $("#tag_text").attr('placeholder', '');
         $(".settingsCollapse").slideToggle();
-        initDesktopAutoplayExample();
-        playAds();  
+        if (myTimer > 1) {
+            restart();
+            initDesktopAutoplayExample();
+            playAds();
+        } else {
+            initDesktopAutoplayExample();
+        }
+
     }
 
 })

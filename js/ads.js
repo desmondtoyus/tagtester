@@ -24,11 +24,11 @@ var intervalTimer;
 var responseTime = 0;
 var responseTimer;
 
+videoContent = document.getElementById('content_video');
 function initDesktopAutoplayExample() {
-    videoContent = document.getElementById('content_video');
     setUpIMA();
     // Check if autoplay is supported.
-    responseTime =0;
+    responseTime = 0;
     responseTimer = setInterval(
         function () {
             responseTime += 0.1;
@@ -206,7 +206,7 @@ function onAdsManagerLoaded(adsManagerLoadedEvent) {
         onAdEvent);
     if (autoplayAllowed) {
         playAds();
-    } 
+    }
 }
 
 function onAdEvent(adEvent) {
@@ -218,7 +218,6 @@ function onAdEvent(adEvent) {
             console.log("Event: Ads loaded");
             $('#tag-request').css({ 'color': 'green', 'border-color': 'green' });
             $('#tag-request-wait').text('')
-
             if (!ad.isLinear()) {
                 videoContent.play();
             }
@@ -230,14 +229,14 @@ function onAdEvent(adEvent) {
             $('#tag-start-wait').text('');
             clearInterval(responseTimer);
             $('#tag-start-res').html(`Response time: ${responseTime.toFixed(2)} sec\n`);
-           
+
             intervalTimer = setInterval(
                 function () {
-                    let remainingTime = adsManager.getRemainingTime().toFixed(0);    
-                        if (remainingTime == '-1') {
-                            remainingTime = '0:00'
-                        }   
-                    $('#tag-start-dur').html(`Duration: ${ad.getDuration().toFixed(0) } sec \n ${remainingTime} sec remaining`);
+                    let remainingTime = adsManager.getRemainingTime().toFixed(0);
+                    if (remainingTime == '-1') {
+                        remainingTime = '0:00'
+                    }
+                    $('#tag-start-dur').html(`Duration: ${ad.getDuration().toFixed(0)} sec \n ${remainingTime} sec remaining`);
                 },
                 1000);
             break;
@@ -277,16 +276,15 @@ function onAdEvent(adEvent) {
 
 function onAdError(adErrorEvent) {
     $('#tag-error-wait').text('');
-    $('#tag-error').css({ 'color': 'red', 'border-color': 'red'});
+    $('#tag-error').css({ 'color': 'red', 'border-color': 'red' });
     clearInterval(responseTimer);
     $('#tag-error-msg').html(`Error Message: ${adErrorEvent.getError()}`)
     $('#tag-error-res').html(`Response time: ${responseTime.toFixed(2)} sec\n`);
     console.log(adErrorEvent.getError());
     console.log("Event: Error Occured");
-    adsManager.destroy();
 }
 
-function restart(){
+function restart() {
     adsManager.destroy();
 }
 
@@ -313,6 +311,8 @@ function playAds() {
         adsManager.start();
     } catch (adError) {
         // An error may be thrown if there was a problem with the VAST response.
-        videoContent.play();
+        // videoContent.play();
+        console.log('CATCH ERROR')
+        videoContent.play()
     }
 }
