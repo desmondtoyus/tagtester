@@ -199,9 +199,6 @@ function onAdsManagerLoaded(adsManagerLoadedEvent) {
         google.ima.AdEvent.Type.PAUSED,
         onAdEvent);
     adsManager.addEventListener(
-        google.ima.AdEvent.Type.STARTED,
-        onAdEvent);
-    adsManager.addEventListener(
         google.ima.AdEvent.Type.THIRD_QUARTILE,
         onAdEvent);
     if (autoplayAllowed) {
@@ -209,13 +206,14 @@ function onAdsManagerLoaded(adsManagerLoadedEvent) {
     }
 }
 
+
 function onAdEvent(adEvent) {
-    console.log('EVENT HAPPENING = ', adEvent)
     var ad = adEvent.getAd();
+    console.log('GET AD = ', ad);
+    console.log('EVENT TYPE=', adEvent);
     switch (adEvent.type) {
         case google.ima.AdEvent.Type.LOADED:
             clearInterval(intervalTimer);
-            console.log("Event: Ads loaded");
             $('#tag-request').css({ 'color': 'green', 'border-color': 'green' });
             $('#tag-request-wait').text('')
             if (!ad.isLinear()) {
@@ -224,12 +222,16 @@ function onAdEvent(adEvent) {
             break;
 
         case google.ima.AdEvent.Type.STARTED:
-            console.log("Event: Ads Started");
             $('#tag-start').css({ 'color': 'green', 'border-color': 'green', });
             $('#tag-start-wait').text('');
             clearInterval(responseTimer);
             $('#tag-start-res').html(`Response time: ${responseTime.toFixed(2)} sec\n`);
-
+            $('#time-response').html(`${responseTime.toFixed(2)} sec`);
+            $('#ad-type').text(ad.getContentType().toString());
+            $('#ad-engine').text(ad.getAdSystem().toString());
+            $('#api-framework').text(ad.getApiFramework().toString());
+            $('.meta-display').css({ 'display': 'block' });
+            showMeta();
             intervalTimer = setInterval(
                 function () {
                     let remainingTime = adsManager.getRemainingTime().toFixed(0);
@@ -242,9 +244,8 @@ function onAdEvent(adEvent) {
             break;
 
         case google.ima.AdEvent.Type.FIRST_QUARTILE:
-            console.log("Event: FIRST_QUARTILE");
             $('#tag-quarter-wait').text('');
-            $('#tag-quarter').css({ 'color': 'green', 'border-color': 'green', });
+            $('#tag-quarter').css({ 'color': 'green', 'border-color': 'green' });
             break;
 
         case google.ima.AdEvent.Type.CLICK:
@@ -252,21 +253,18 @@ function onAdEvent(adEvent) {
             break;
 
         case google.ima.AdEvent.Type.MIDPOINT:
-            console.log("Event: HALF WAY");
             $('#tag-half-wait').text('');
-            $('#tag-half').css({ 'color': 'green', 'border-color': 'green', });
+            $('#tag-half').css({ 'color': 'green', 'border-color': 'green' });
             break;
 
         case google.ima.AdEvent.Type.THIRD_QUARTILE:
-            console.log("Event: THIRD_QUARTILE");
             $('#tag-third-wait').text('');
-            $('#tag-third').css({ 'color': 'green', 'border-color': 'green', });
+            $('#tag-third').css({ 'color': 'green', 'border-color': 'green' });
             break;
 
         case google.ima.AdEvent.Type.COMPLETE:
-            console.log("Event: COMPLETED");
             $('#tag-complete-wait').text('');
-            $('#tag-complete').css({ 'color': 'green', 'border-color': 'green', });
+            $('#tag-complete').css({ 'color': 'green', 'border-color': 'green' });
             break;
 
         case google.ima.AdEvent.Type.PAUSED:
@@ -276,12 +274,17 @@ function onAdEvent(adEvent) {
 
 function onAdError(adErrorEvent) {
     $('#tag-error-wait').text('');
+    $('.meta-display').css({ 'display': 'block' });
+    showMeta();
     $('#tag-error').css({ 'color': 'red', 'border-color': 'red' });
     clearInterval(responseTimer);
-    $('#tag-error-msg').html(`Error Message: ${adErrorEvent.getError()}`)
+    $('#tag-error-msg').html(`Error Message: An error occured with this tag`)
     $('#tag-error-res').html(`Response time: ${responseTime.toFixed(2)} sec\n`);
-    console.log(adErrorEvent.getError());
-    console.log("Event: Error Occured");
+    $('#time-error').text(`${responseTime.toFixed(2)} sec`);
+    let occuredError = adErrorEvent.getError().toString();
+    let occuredErrorArr = occuredError.split(':');
+    $('#error-code').text(occuredErrorArr[0]);
+    $('#error-msg').text(occuredErrorArr[1]);
 }
 
 function restart() {
@@ -312,7 +315,11 @@ function playAds() {
     } catch (adError) {
         // An error may be thrown if there was a problem with the VAST response.
         // videoContent.play();
-        console.log('CATCH ERROR')
         videoContent.play()
     }
+}
+function showMeta() {
+    let tag = document.getElementById('tag_text').value;
+    $("#original-tag").text(tag);
+    $("#request-tag").text(tag);
 }

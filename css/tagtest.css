@@ -18,10 +18,10 @@ a {
 	text-decoration:none;
 	color:#777;
 }
-#adContainer{
+/* #adContainer{
 	padding-top: 5%;
 max-height: 390px;
-}
+} */
 header {
 	display:block;
 }
@@ -99,6 +99,13 @@ h4 {
 .body-row {
 	border-top-color:#ddd;
 	padding:15px;
+}
+
+.body-row2 {
+	border-top-color:#ddd;
+	width:640px;
+	margin:0 auto;
+	height: 400px;
 }
 .settings {
 	width:100%;
@@ -218,7 +225,7 @@ hr {
 .videoShow {
 	width:640px;
 	margin:0 auto;
-	height: 410px;
+	height: 360px;
 }
 .disabled {
 	opacity:0.5;
@@ -392,7 +399,7 @@ width: 100%;
 .metaIntro {
 	text-align:center;
 }
-.metaResults {
+.meta-display {
 	display:none;
 }
 .metaRow {
@@ -405,7 +412,7 @@ width: 100%;
 .metaResult {
 	margin-top:5px;
 }
-.requestCall,.requestOriginal {
+.requestCall,.request-tag {
 	border:1px solid #ddd;
 	width:90%;
 	background:#f4f4f4;
@@ -573,4 +580,13 @@ footer {
 	text-align:center;
 	font-size:11px;
 	margin-bottom:10px;
+}
+
+
+#display-holder{
+	display: none;
+}
+#adContainer{
+	margin-top: 20px;
+	background-image: url("../img/pilot.png");
 }
