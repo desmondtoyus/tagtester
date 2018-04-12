@@ -352,7 +352,7 @@ hr {
 }
 video{
 	width: 100%;
-    height: 100%;
+	height: 100%;
 }
 #content_video{
 width: 100%;
@@ -589,4 +589,5 @@ footer {
 #adContainer{
 	margin-top: 20px;
 	background-image: url("../img/pilot.png");
+	border-radius: 8px;
 }

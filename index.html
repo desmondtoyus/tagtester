@@ -74,13 +74,13 @@
                         <div class="impFlow">
                             <ul>
                                 <li>
-                                    <a href="http://pilotx.tv/tagtest#" class="event" id="tag-request">
+                                    <a href="http://pilotx.tv/tagtester#" class="event" id="tag-request">
                                         <span class='tag-heading'>Ad Request</span>
                                         <div id="tag-request-wait"> (waiting...)</div>
                                     </a>
                                     <ul>
                                         <li>
-                                            <a href="http://pilotx.tv/tagtest#" class="event" id="tag-error">
+                                            <a href="http://pilotx.tv/tagtester#" class="event" id="tag-error">
                                                 <span class='tag-heading'>Ad Error </span>
                                                 <div class="waiting" id="tag-error-wait"> (waiting...)</div>
 
@@ -90,7 +90,7 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="http://pilotx.tv/tagtest#" class="event" id="tag-start">
+                                            <a href="http://pilotx.tv/tagtester#" class="event" id="tag-start">
                                                 <span class='tag-heading'>Ad Start</span>
                                                 <div class="waiting" id="tag-start-wait"> (waiting...)</div>
                                                 <!-- <div class="event hiddenEvent" data-type="timetoimp"> -->
@@ -100,25 +100,25 @@
                                             </a>
                                             <ul>
                                                 <li>
-                                                    <a href="http://pilotx.tv/tagtest#" class="event" id="tag-quarter">
+                                                    <a href="http://pilotx.tv/tagtester#" class="event" id="tag-quarter">
                                                         <span class='tag-heading'>25% Complete </span>
                                                         <div class="waiting" id="tag-quarter-wait"> (waiting...)</div>
                                                     </a>
                                                     <ul>
                                                         <li>
-                                                            <a href="http://pilotx.tv/tagtest#" class="event" id="tag-half">
+                                                            <a href="http://pilotx.tv/tagtester#" class="event" id="tag-half">
                                                                 <span class='tag-heading'>50% Complete</span>
                                                                 <div class="waiting" id="tag-half-wait"> (waiting...)</div>
                                                             </a>
                                                             <ul>
                                                                 <li>
-                                                                    <a href="http://pilotx.tv/tagtest#" class="event" id="tag-third">
+                                                                    <a href="http://pilotx.tv/tagtester#" class="event" id="tag-third">
                                                                         <span class='tag-heading'>75% Complete</span>
                                                                         <div class="waiting" id="tag-third-wait"> (waiting...)</div>
                                                                     </a>
                                                                     <ul>
                                                                         <li>
-                                                                            <a href="http://pilotx.tv/tagtest#" class="event" id="tag-complete">
+                                                                            <a href="http://pilotx.tv/tagtester#" class="event" id="tag-complete">
                                                                                 <span class='tag-heading'>Ad Complete</span>
                                                                                 <div class="waiting" id="tag-complete-wait"> (waiting...)</div>
                                                                             </a>
@@ -129,13 +129,13 @@
                                                         </li>
                                                     </ul>
                                                 </li>
-                                                <li class="dashed">
-                                                    <a href="http://pilotx.tv/tagtest#" class="dashed event" data-type="click">Click
-                                                        <div class="waiting" data-type="click"> (waiting...)</div>
+                                                <li>
+                                                    <a href="http://pilotx.tv/tagtester#" class="event" id="tag-click">Click
+                                                        <div class="waiting" id="tag-click-wait"> (waiting...)</div>
                                                     </a>
-                                                    <ul class="dashed">
+                                                    <ul>
                                                         <li class="dashed">
-                                                            <a href="http://pilotx.tv/tagtest#" class="dashed event" data-type="pause">Pause
+                                                            <a href="http://pilotx.tv/tagtester#" class="event" id="tag-pause">Pause
                                                                 <div class="waiting" data-type="pause"> (waiting...)</div>
                                                             </a>
                                                         </li>
@@ -154,7 +154,7 @@
                 <div class="rowHeader">
                     <h4>Video</h4>
                 </div>
-                <div class="body-row2" >
+                <div class="body-row2">
                     <div class="videoShow" id='display-holder'>
                         <video id="content_video">
                             <source src="img/pilotx.mp4" type="video/mp4" />
@@ -163,90 +163,91 @@
 
                     </div>
                     <!--  -->
-                    <div class="videoShow"  id="adContainer">
+                    <div>
+                        <div class="videoShow" id="adContainer">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="metaWrapper">
+                <div class="rowWrapper">
+                    <div class="rowHeader">
+                        <h4>Information</h4>
+                    </div>
+                    <div class="body-row">
+                        <div class="metaIntro"></div>
+                        <div class="meta-display">
+                            <div class="metaRow" data-type="original">
+                                <div class="metaHeader" data-type="original">Tag</div>
+                                <div class="metaResult" data-type="original">
+                                    <div class="request-tag" id="original-tag"> </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="metaRow" data-type="macros">
+                                <div class="metaHeader" data-type="macros">Macros Replaced</div>
+                                <div class="metaResult" data-type="macros">None</div>
+                            </div>
+                            <hr>
+                            <div class="metaRow" data-type="vasttag">
+                                <div class="metaHeader" data-type="vasttag">Tag Requested</div>
+                                <div class="metaResult" data-type="vasttag">
+                                    <div class="request-tag" id="request-tag"> </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="metaRow" data-type="tagtiming">
+                                <div class="metaHeader" data-type="tagtiming">Timing Info</div>
+                                <div class="metaResult" data-type="tagtiming">
+
+                                    <div>
+                                        <b>Response time:</b>
+                                        <span id='time-response'>0</span>
+                                    </div>
+                                    <div>
+                                        <b>Error Time:</b>
+                                        <span id='time-error'>0</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="metaRow" data-type="errorinfo">
+                                <div class="metaHeader" data-type="errorinfo">Inpression Info</div>
+                                <div class="metaResult" data-type="errorinfo">
+                                    <div class="errorMeta">
+                                        <b>Ad Type:</b>
+                                        <span id="ad-type">n/a</span>
+                                    </div>
+                                    <div class="errorMeta">
+                                        <b>Ad Engine:</b>
+                                        <span id="ad-engine">n/a</span>
+                                    </div>
+                                    <div class="errorMeta">
+                                        <b>API Framework:</b>
+                                        <span id="api-framework">n/a</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="metaRow" data-type="errorinfo">
+                                <div class="metaHeader" data-type="errorinfo">Error Info</div>
+                                <div class="metaResult" data-type="errorinfo">
+                                    <div class="errorMeta">
+                                        <b>Error code:</b>
+                                        <span id="error-code">n/a</span>
+                                    </div>
+                                    <div class="errorMeta">
+                                        <b>Error message:</b>
+                                        <span id="error-msg">n/a</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="metaWrapper">
-            <div class="rowWrapper">
-                <div class="rowHeader">
-                    <h4>Information</h4>
-                </div>
-                <div class="body-row">
-                    <div class="metaIntro"></div>
-                    <div class="meta-display">
-                        <div class="metaRow" data-type="original">
-                            <div class="metaHeader" data-type="original">Tag</div>
-                            <div class="metaResult" data-type="original">
-                                <div class="request-tag" id="original-tag"> </div>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="metaRow" data-type="macros">
-                            <div class="metaHeader" data-type="macros">Macros Replaced</div>
-                            <div class="metaResult" data-type="macros">None</div>
-                        </div>
-                        <hr>
-                        <div class="metaRow" data-type="vasttag">
-                            <div class="metaHeader" data-type="vasttag">Tag Requested</div>
-                            <div class="metaResult" data-type="vasttag">
-                                <div class="request-tag" id="request-tag"> </div>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="metaRow" data-type="tagtiming">
-                            <div class="metaHeader" data-type="tagtiming">Timing Info</div>
-                            <div class="metaResult" data-type="tagtiming">
-
-                                <div>
-                                    <b>Response time:</b>
-                                    <span id='time-response'>0</span>
-                                </div>
-                                <div>
-                                    <b>Error Time:</b>
-                                    <span id='time-error'>0</span>
-                                </div>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="metaRow" data-type="errorinfo">
-                            <div class="metaHeader" data-type="errorinfo">Inpression Info</div>
-                            <div class="metaResult" data-type="errorinfo">
-                                <div class="errorMeta">
-                                    <b>Ad Type:</b>
-                                    <span id="ad-type">n/a</span>
-                                </div>
-                                <div class="errorMeta">
-                                    <b>Ad Engine:</b>
-                                    <span id="ad-engine">n/a</span>
-                                </div>
-                                <div class="errorMeta">
-                                    <b>API Framework:</b>
-                                    <span id="api-framework">n/a</span>
-                                </div>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="metaRow" data-type="errorinfo">
-                            <div class="metaHeader" data-type="errorinfo">Error Info</div>
-                            <div class="metaResult" data-type="errorinfo">
-                                <div class="errorMeta">
-                                    <b>Error code:</b>
-                                    <span id="error-code">n/a</span>
-                                </div>
-                                <div class="errorMeta">
-                                    <b>Error message:</b>
-                                    <span id="error-msg">n/a</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
         </div>
     </main>
 </body>

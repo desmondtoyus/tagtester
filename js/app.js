@@ -3,9 +3,10 @@ $('#test_tag').on('click', function (e) {
     e.preventDefault();
     let tag = $("#tag_text").val().trim();
     let id = "content_video";
-    console.log("TAG=", tag);
     $('#tag-request').css({ 'color': '', 'border-color': '' });
     $('#tag-request-wait').text('waiting');
+    $('#tag-click-wait').text('waiting');
+    $('#tag-click').css({ 'color': '', 'border-color': '' });
     $('#tag-start').css({ 'color': '', 'border-color': '' });
     $('#tag-start-wait').text('waiting');
     $('#tag-start-res').text('');
@@ -33,7 +34,6 @@ $('#test_tag').on('click', function (e) {
     $('#api-framework').text('n/a');
     $('.meta-display').css({ 'display': 'none' });
     if (tag == '') {
-        console.log('Empty Textbox');
         $("#tag_text").css({ 'border-color': 'red' });
         $("#tag_text").attr('placeholder', 'Tag goes here');
     }

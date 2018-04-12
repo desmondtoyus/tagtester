@@ -209,8 +209,6 @@ function onAdsManagerLoaded(adsManagerLoadedEvent) {
 
 function onAdEvent(adEvent) {
     var ad = adEvent.getAd();
-    console.log('GET AD = ', ad);
-    console.log('EVENT TYPE=', adEvent);
     switch (adEvent.type) {
         case google.ima.AdEvent.Type.LOADED:
             clearInterval(intervalTimer);
@@ -249,7 +247,8 @@ function onAdEvent(adEvent) {
             break;
 
         case google.ima.AdEvent.Type.CLICK:
-            console.log("Event: CLICKED");
+            $('#tag-click-wait').text('');
+            $('#tag-click').css({ 'color': 'green', 'border-color': 'green' });
             break;
 
         case google.ima.AdEvent.Type.MIDPOINT:
