@@ -58,3 +58,32 @@ $('.settingsHeader').on('click', function (e) {
     e.preventDefault();
     $(".settingsCollapse").slideToggle();
 });
+
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+function loadTagOnRedirect(){
+    let redirectTag = getParameterByName('tag'); 
+    if (redirectTag) {
+        $("#tag_text").text(redirectTag);
+        myTimer++;
+        $("#tag_text").css({ 'border-color': 'blue' });
+        $("#tag_text").attr('placeholder', '');
+        $(".settingsCollapse").slideToggle();
+        if (myTimer > 1) {
+            restart();
+            initDesktopAutoplayExample();
+            playAds();
+        } else {
+            initDesktopAutoplayExample();
+        }
+    }
+    
+}
